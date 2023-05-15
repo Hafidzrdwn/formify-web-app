@@ -46,7 +46,8 @@ class QuestionController extends Controller
         }
 
         $data = $request->all();
-        $data['choices'] = implode(',', $data['choices']);
+        if (array_key_exists('choices', $data) && is_array($data['choices'])) $data['choices'] = implode(',', $data['choices']);
+        else $data['choices'] = null;
         $data['form_id'] = $form->id;
 
         $question = Question::create($data);

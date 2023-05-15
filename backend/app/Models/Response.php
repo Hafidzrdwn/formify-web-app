@@ -14,8 +14,21 @@ class Response extends Model
         'date'
     ];
     protected $hidden = [
+        'id',
+        'form_id',
+        'user_id',
         'created_at',
         'updated_at'
     ];
     public $timestamps = false;
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function answers()
+    {
+        return $this->hasMany(Answer::class);
+    }
 }

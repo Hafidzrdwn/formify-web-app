@@ -20,4 +20,9 @@ class Question extends Model
         'updated_at',
     ];
     public $timestamps = false;
+
+    public function answer()
+    {
+        return $this->hasOne(Answer::class);
+    }
 }

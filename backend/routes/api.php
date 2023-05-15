@@ -42,5 +42,6 @@ Route::prefix('v1')->group(function () {
         });
 
         Route::post('/forms/{slug}/responses', [ResponseController::class, 'submit']);
+        Route::get('/forms/{slug}/responses', [ResponseController::class, 'getAll']);
     });
 });

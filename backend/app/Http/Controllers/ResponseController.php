@@ -81,4 +81,38 @@ class ResponseController extends Controller
             "message" => "Submit response success"
         ], 200);
     }
+
+    public function getAll($slug)
+    {
+        $form = Form::where('slug', $slug)->first();
+        if (!$form) {
+            return response()->json([
+                "message" => "Form not found"
+            ], 404);
+        }
+
+        if (auth()->user()->id != $form->creator_id) {
+            return response()->json([
+                "message" => "Forbidden access"
+            ], 403);
+        }
+
+        $responses = Response::with(['user', 'answers'])->where('form_id', $form->id)->get();
+        $qna = [];
+
+        foreach ($responses as $k => $res) {
+            foreach ($res['answers'] as $value) {
+                $qst = Question::find($value['question_id'])['name'];
+                $qna[$k][$qst] = $value['value'];
+            }
+            unset($responses[$k]['answers']);
+            $responses[$k]['answers'] = $qna[$k];
+        }
+
+
+        return response()->json([
+            "message" => "Get responses success",
+            'responses' => $responses
+        ], 200);
+    }
 }
